@@ -1,0 +1,2 @@
+xpack.monitoring.enabled : false
+path.config: pipeline

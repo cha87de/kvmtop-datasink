@@ -1,0 +1,28 @@
+version: '2'
+services:
+
+  logstash:
+    build: logstash
+    image: kvmtop-logstash
+    ports:
+     - 12345:12345
+
+  influxdb:
+    image: influxdb:1.4-alpine
+    stdin_open: true
+    tty: true
+    environment:
+    - INFLUXDB_DB=kvmtop
+    - INFLUXDB_HTTP_AUTH_ENABLED=true
+    - INFLUXDB_ADMIN_USER=admin
+    - INFLUXDB_ADMIN_PASSWORD=secret
+    ports:
+     - 8086:8086
+
+  chronograf:
+    image: chronograf
+    ports:
+     - 8888:8888
+    command: --influxdb-url=http://influxdb:8086
+
+     
