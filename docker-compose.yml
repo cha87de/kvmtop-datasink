@@ -3,7 +3,7 @@ services:
 
   logstash:
     build: logstash
-    image: kvmtop-logstash
+    image: cha87de/kvmtop-datasink-logstash:latest
     ports:
      - 12345:12345
 
