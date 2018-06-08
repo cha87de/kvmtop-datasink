@@ -3,11 +3,13 @@ services:
 
   logstash:
     image: cha87de/kvmtop-datasink-logstash:latest
+    restart: always
     ports:
      - 12345:12345
 
   influxdb:
     image: influxdb:1.4-alpine
+    restart: always
     stdin_open: true
     tty: true
     environment:
@@ -20,6 +22,7 @@ services:
 
   chronograf:
     image: chronograf
+    restart: always
     ports:
      - 8888:8888
     command: --influxdb-url=http://influxdb:8086
