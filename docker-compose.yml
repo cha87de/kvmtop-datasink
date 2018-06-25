@@ -3,16 +3,13 @@ services:
 
   logstash:
     image: cha87de/kvmtop-datasink-logstash:latest
-<<<<<<< HEAD
     environment:
     - INPUT_PORT=12345
     - OUTPUT_HOST=influxdb
     - OUTPUT_PORT=8086
     - OUTPUT_USER=admin
     - OUTPUT_PASS=secret
-=======
     restart: always
->>>>>>> 0b2e427b714310d77724e929a467e6fe5057e608
     ports:
      - 12345:12345
 
