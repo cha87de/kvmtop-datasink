@@ -1,0 +1,66 @@
+input {
+    tcp {
+        port => $INPUT_PORT
+        codec => json
+    }
+}
+
+filter {
+    metricize {
+        # split event into domain and host event
+       metrics => [ "domains", "host" ]
+    }
+
+    if [metric] == "domains" {
+        # produce one event for each domain
+        split {
+            field => "value"
+        }
+    }
+
+    if [metric] == "domains" or [metric] == "host" {
+        # move fields form 'value' object to root
+        ruby {
+            code => "
+                event.get('value').each {|k, v|
+                    event.set(k, v)
+                }
+                event.remove('value')
+            "
+        }
+    }
+}
+
+
+output {
+    if [metric] == "domains" {
+        # stdout {}
+        influxdb {
+            host => "$OUTPUT_HOST"
+            port => $OUTPUT_PORT
+            user => "$OUTPUT_USER"
+            password => "$OUTPUT_PASS"
+            db => "kvmtop"
+            time_precision => "ms"
+            measurement => "kvmtop.domains"
+            send_as_tags => ["UUID", "name", "host_name"]
+            use_event_fields_for_data_points => true
+        }
+    }
+
+    if [metric] == "host" {
+        # stdout {}
+        influxdb {
+            host => "$OUTPUT_HOST"
+            port => $OUTPUT_PORT
+            user => "$OUTPUT_USER"
+            password => "$OUTPUT_PASS"
+            db => "kvmtop"
+            time_precision => "ms"
+            measurement => "kvmtop.hosts"
+            send_as_tags => ["host_name"]
+            use_event_fields_for_data_points => true
+        }    
+    }
+  
+}

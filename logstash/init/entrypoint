@@ -1,0 +1,62 @@
+#!/bin/bash
+
+##############################################################################
+# validate if all container variables are set
+##############################################################################
+function validate(){
+    vars="INPUT_PORT OUTPUT_HOST OUTPUT_PORT OUTPUT_USER OUTPUT_PASS"
+    for var in $vars; do
+        if [[ $(env | awk -F "=" '{print $1}' | grep "^$var$") != "$var" ]]; then
+            echo "$var not set but required."
+            return 1
+        fi
+    done
+  
+}
+
+##############################################################################
+# write config vars with configfile template
+##############################################################################
+function writeConfigOptions(){
+    echo "write config options"
+    export INPUT_PORT=$INPUT_PORT
+    export OUTPUT_HOST=$OUTPUT_HOST
+    export OUTPUT_PORT=$OUTPUT_PORT
+    export OUTPUT_USER=$OUTPUT_USER
+    export OUTPUT_PASS=$OUTPUT_PASS
+    cat /usr/share/logstash/pipeline-templates/kvmtop2influxdb.conf.tmpl \
+        | envsubst > /usr/share/logstash/pipeline/kvmtop2influxdb.conf
+    
+}
+function init(){
+    # write file based config options
+    writeConfigOptions
+}
+
+
+##############################################################################
+function main(){
+    # validate env vars
+    validate
+    if [[ $? != 0 ]]; then 
+        echo "validation failed. exiting now." >&2
+        exit 1
+    fi
+
+    # initialize
+    init
+    if [[ $? != 0 ]]; then 
+        echo "init failed. exiting now." >&2
+        exit 1
+    fi
+
+    # start original logstash entrypoint
+    echo "start logstash entrypoint"
+    /usr/local/bin/docker-entrypoint "$@"
+}
+
+if [[ "$1" == "" ]]; then
+    main
+else
+    exec "$@"
+fi
