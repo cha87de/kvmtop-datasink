@@ -8,7 +8,7 @@ input {
 filter {
     metricize {
         # split event into domain and host event
-       metrics => [ "domains", "host" ]
+       metrics => [ "domains", "host", "profile" ]
     }
 
     if [metric] == "domains" {
@@ -29,6 +29,31 @@ filter {
             "
         }
     }
+
+    if [metric] == "profile" {
+        # rearrange metric profiles to:
+        #  "metric" => "profile",
+        #  "UUID" => "c08b4f88-a833-4468-bf11-4c6c2dadd277",        
+        #  "cpu" => "[[100,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",
+        #  "io" => "[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",
+        #  "net" => "[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",
+
+        ruby {
+            code => "
+                event.get('value').each {|k, v|
+                    if k == 'name'
+                        event.set('UUID', v)
+                    elsif k == 'metrics'
+                        v.each {|metric|
+                            event.set(metric['name'], metric['txmatrix'].to_json)
+                        }
+                    end
+                }
+                event.remove('value')
+            "
+        }
+    }  
+
 }
 
 
@@ -62,5 +87,20 @@ output {
             use_event_fields_for_data_points => true
         }    
     }
+
+    if [metric] == "profile" {
+        stdout {}
+        influxdb {
+            host => "$OUTPUT_HOST"
+            port => $OUTPUT_PORT
+            user => "$OUTPUT_USER"
+            password => "$OUTPUT_PASS"
+            db => "kvmtop"
+            time_precision => "ms"
+            measurement => "kvmtop.profile"
+            send_as_tags => ["UUID"]
+            use_event_fields_for_data_points => true
+        }    
+    }    
   
 }
