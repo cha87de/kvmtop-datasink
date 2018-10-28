@@ -2,8 +2,7 @@ version: '2'
 services:
 
   logstash:
-    #image: cha87de/kvmtop-datasink-logstash:latest
-    image: kvmproviler-logstash
+    image: cha87de/kvmtop-datasink-logstash:latest
     environment:
     - INPUT_PORT=12345
     - OUTPUT_HOST=influxdb
