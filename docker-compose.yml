@@ -2,7 +2,8 @@ version: '2'
 services:
 
   logstash:
-    image: cha87de/kvmtop-datasink-logstash:latest
+    #image: cha87de/kvmtop-datasink-logstash:latest
+    image: kvmproviler-logstash
     environment:
     - INPUT_PORT=12345
     - OUTPUT_HOST=influxdb
@@ -17,8 +18,8 @@ services:
     image: influxdb:1.4-alpine
     restart: always
     stdin_open: true
-    volumes:
-    - /opt/influxdb/:/var/lib/influxdb
+    #volumes:
+    #- /opt/influxdb/:/var/lib/influxdb
     environment:
     - INFLUXDB_DB=kvmtop
     - INFLUXDB_HTTP_AUTH_ENABLED=true
@@ -30,10 +31,21 @@ services:
   chronograf:
     image: chronograf
     restart: always
-    volumes:
-    - /opt/chronograf:/var/lib/chronograf
+    #volumes:
+    #- /opt/chronograf:/var/lib/chronograf
     ports:
      - 8888:8888
     command: --influxdb-url=http://influxdb:8086
 
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+    - 3000:3000/tcp
+    #volumes:
+    #- /opt/grafana:/var/lib/grafana
+    environment:
+      GF_DASHBOARDS_JSON_ENABLED: 'true'
+      GF_SECURITY_ADMIN_PASSWORD: secret
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_SECRET_KEY: 1234
      
