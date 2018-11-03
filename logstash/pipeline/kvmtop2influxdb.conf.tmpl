@@ -34,9 +34,9 @@ filter {
         # rearrange metric profiles to:
         #  "metric" => "profile",
         #  "UUID" => "c08b4f88-a833-4468-bf11-4c6c2dadd277",        
-        #  "cpu" => "[[100,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",
-        #  "io" => "[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",
-        #  "net" => "[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]",
+        #  "cpu" => "{"name":"cpu","txmatrix":[[100,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],"stats":{"min":0,"max":100,"stddev":0,"avg":0}}",
+        #  "io" => "...",
+        #  "net" => "...",
 
         ruby {
             code => "
@@ -45,7 +45,7 @@ filter {
                         event.set('UUID', v)
                     elsif k == 'metrics'
                         v.each {|metric|
-                            event.set(metric['name'], metric['txmatrix'].to_json)
+                            event.set(metric['name'], metric.to_json)
                         }
                     end
                 }
