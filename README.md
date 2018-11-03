@@ -1,7 +1,19 @@
 # kvmtop-datasink
 
-Datasink for kvmtop: kvmtop send monitoring data to logstash, which stores them into influxdb. A chronograf dashboard visualises the kvmtop data stored in influxdb.
+Datasink for kvmtop: kvmtop send monitoring data to logstash, which stores them into influxdb. A chronograf or grafana dashboard visualises the kvmtop data stored in influxdb.
 
+```
+                                      kvmtop-datasink
+                  +-----------------------------------------------------+
+                  |                                                     |
++------------     | +------------+     +------------+     +-----------+ |
+|           |     | |            |     |            |     |           | |
+|  kvmtop   +---> | |  logstash  +---> |  influxdb  +---> |  grafana  | |
+|           |     | |            |     |            |     |           | |
++------------     | +------------+     +------------+     +-----------+ |
+                  |                                                     |
+                  +-----------------------------------------------------+
+```
 
 ## Deploy with Docker Compose
 
