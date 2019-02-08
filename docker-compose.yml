@@ -36,12 +36,16 @@ services:
      - 8888:8888
     command: --influxdb-url=http://influxdb:8086
 
+  grafana-config:
+    image: cha87de/kvmtop-datasink-grafana-config:latest
+    restart: "no"
+
   grafana:
     image: grafana/grafana:latest
     ports:
     - 3000:3000/tcp
-    #volumes:
-    #- /opt/grafana:/var/lib/grafana
+    volumes_from:
+    - grafana-config
     environment:
       GF_DASHBOARDS_JSON_ENABLED: 'true'
       GF_SECURITY_ADMIN_PASSWORD: secret
