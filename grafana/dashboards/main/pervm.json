@@ -28,7 +28,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -146,7 +146,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -264,7 +264,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "format": "deckbytes",
       "gauge": {
         "maxValue": 100,
@@ -382,7 +382,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "format": "decbytes",
       "gauge": {
         "maxValue": 100,
@@ -493,7 +493,7 @@
     },
     {
       "columns": [],
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "fontSize": "100%",
       "gridPos": {
         "h": 11,
@@ -580,7 +580,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -707,7 +707,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -834,7 +834,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -958,7 +958,7 @@
     },
     {
       "columns": [],
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "fontSize": "100%",
       "gridPos": {
         "h": 18,
@@ -1048,7 +1048,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1181,7 +1181,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1322,7 +1322,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "kvmtop datasink",
+        "datasource": "kvmtop-influx",
         "hide": 0,
         "includeAll": true,
         "label": null,
@@ -1348,7 +1348,7 @@
             "$__all"
           ]
         },
-        "datasource": "kvmtop datasink",
+        "datasource": "kvmtop-influx",
         "hide": 0,
         "includeAll": true,
         "label": null,
@@ -1399,6 +1399,6 @@
   },
   "timezone": "",
   "title": "kvmtop: virtual machine inspection",
-  "uid": "2QCq_mamk",
+  "uid": "kvmtop-vms",
   "version": 7
 }

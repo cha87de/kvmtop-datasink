@@ -55,7 +55,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -166,7 +166,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -278,7 +278,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "decimals": 0,
       "format": "deckbytes",
       "gauge": {
@@ -387,7 +387,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -505,7 +505,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -616,7 +616,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -727,7 +727,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "decimals": 0,
       "format": "deckbytes",
       "gauge": {
@@ -835,7 +835,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 7,
@@ -949,7 +949,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 5,
@@ -1060,7 +1060,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 5,
@@ -1185,7 +1185,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1300,7 +1300,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1415,7 +1415,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1530,7 +1530,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1644,7 +1644,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1759,7 +1759,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1874,7 +1874,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -1989,7 +1989,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "kvmtop datasink",
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -2104,7 +2104,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -2253,6 +2253,6 @@
   },
   "timezone": "",
   "title": "kvmtop cluster overview",
-  "uid": "pvtiYRaik",
+  "uid": "kvmtop-overview",
   "version": 16
 }

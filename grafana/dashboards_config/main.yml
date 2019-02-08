@@ -1,0 +1,9 @@
+apiVersion: 1
+providers:
+- name: 'kvmtop datasink'
+  orgId: 1
+  folder: 'kvmtop-datasink'
+  type: file
+  disableDeletion: false
+  options:
+    path: /var/lib/grafana/dashboards/main
