@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1550675597754,
+  "iteration": 1550676955793,
   "links": [],
   "panels": [
     {
@@ -511,10 +511,10 @@
       },
       "styles": [
         {
-          "alias": "Time",
+          "alias": "Last seen",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "pattern": "Time",
-          "type": "hidden"
+          "type": "date"
         },
         {
           "alias": "",
@@ -556,6 +556,22 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 1,
+          "mappingType": 1,
+          "pattern": "disk_size_capacity",
+          "thresholds": [],
+          "type": "number",
+          "unit": "decbytes"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
           "decimals": 2,
           "pattern": "/.*/",
           "thresholds": [],
@@ -581,7 +597,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT\n \"UUID\", \"cpu_cores\", \"ram_total\"\nFROM\n(\n  SELECT last(\"cpu_cores\") AS \"cpu_cores\", last(\"ram_total\") AS \"ram_total\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter GROUP BY \"UUID\" fill(none)\n) ",
+          "query": "SELECT\n \"UUID\", \"cpu_cores\", \"ram_total\", \"disk_size_capacity\", time\nFROM\n(\n  SELECT last(\"cpu_cores\") AS \"cpu_cores\", last(\"ram_total\") AS \"ram_total\", last(\"disk_size_capacity\") AS \"disk_size_capacity\"  FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter GROUP BY \"UUID\" fill(none)\n) ",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
@@ -1370,5 +1386,5 @@
   "timezone": "",
   "title": "kvmtop: virtual machine inspection",
   "uid": "kvmtop-vms",
-  "version": 8
+  "version": 9
 }
