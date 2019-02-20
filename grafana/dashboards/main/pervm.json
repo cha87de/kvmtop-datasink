@@ -15,8 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1541671233270,
+  "iteration": 1550675597754,
   "links": [],
   "panels": [
     {
@@ -525,6 +524,38 @@
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 0,
+          "mappingType": 1,
+          "pattern": "cpu_cores",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 0,
+          "mappingType": 1,
+          "pattern": "ram_total",
+          "thresholds": [],
+          "type": "number",
+          "unit": "deckbytes"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
           "decimals": 2,
           "pattern": "/.*/",
           "thresholds": [],
@@ -550,7 +581,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT\n \"UUID\", \"cpu_cores\"\nFROM\n(\n  SELECT last(\"cpu_cores\") AS \"cpu_cores\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter GROUP BY \"UUID\" fill(none)\n) ",
+          "query": "SELECT\n \"UUID\", \"cpu_cores\", \"ram_total\"\nFROM\n(\n  SELECT last(\"cpu_cores\") AS \"cpu_cores\", last(\"ram_total\") AS \"ram_total\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter GROUP BY \"UUID\" fill(none)\n) ",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
@@ -590,13 +621,17 @@
       },
       "id": 2,
       "legend": {
-        "avg": false,
+        "alignAsTable": true,
+        "avg": true,
         "current": false,
         "max": false,
         "min": false,
+        "rightSide": true,
         "show": true,
+        "sort": "avg",
+        "sortDesc": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -635,7 +670,7 @@
           "measurement": "kvmtop.domains",
           "orderByTime": "ASC",
           "policy": "autogen",
-          "query": "SELECT\n  sum(\"cpu_total\") AS \"cpu_total\"\nFROM\n(\n  SELECT mean(\"cpu_total\") AS \"cpu_total\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND $timeFilter GROUP BY time($__interval), \"UUID\" fill(null)\n) GROUP BY time($__interval) FILL(none)",
+          "query": "SELECT\n  sum(\"cpu_total\") AS \"cpu_total\"\nFROM\n(\n  SELECT mean(\"cpu_total\") AS \"cpu_total\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND $timeFilter GROUP BY time($__interval), \"UUID\" fill(null)\n) GROUP BY time($__interval), \"UUID\" FILL(none)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -664,6 +699,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "CPU Utilization",
       "tooltip": {
@@ -710,361 +746,24 @@
       "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 0,
-        "y": 11
-      },
-      "id": 15,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "UUID"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "kvmtop.domains",
-          "orderByTime": "ASC",
-          "policy": "autogen",
-          "query": "SELECT\n  sum(\"ram_total\") AS \"ram_total\",\n  sum(\"ram_used\") AS \"ram_used\"\nFROM\n(\n  SELECT mean(\"ram_total\") AS \"ram_total\",  mean(\"ram_used\") AS \"ram_used\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND $timeFilter GROUP BY time($__interval), \"UUID\" fill(null)\n) GROUP BY time($__interval) FILL(none)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "cpu_total"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "UUID",
-              "operator": "=~",
-              "value": "/^$UUID$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Memory Utilisation",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "deckbytes",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "kvmtop-influx",
-      "fill": 1,
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 6,
-        "y": 11
-      },
-      "id": 9,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "UUID"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "kvmtop.domains",
-          "orderByTime": "ASC",
-          "policy": "autogen",
-          "query": "SELECT\n  sum(\"disk_size_capacity\") AS \"capacity\",\n  sum(\"disk_size_allocation\") AS \"allocation\"\nFROM\n(\n  SELECT mean(\"disk_size_capacity\") AS \"disk_size_capacity\", mean(\"disk_size_allocation\") AS \"disk_size_allocation\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter GROUP BY time($__interval), \"UUID\" fill(null)\n) GROUP BY time($__interval) FILL(none)",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "cpu_total"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "UUID",
-              "operator": "=~",
-              "value": "/^$UUID$/"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Disk Allocation",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "decbytes",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "columns": [],
-      "datasource": "kvmtop-influx",
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 18,
+        "h": 12,
         "w": 12,
-        "x": 12,
-        "y": 11
-      },
-      "id": 14,
-      "links": [],
-      "pageSize": null,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 0,
-        "desc": true
-      },
-      "styles": [
-        {
-          "alias": "Time",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "UUID"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "kvmtop.profile",
-          "orderByTime": "ASC",
-          "policy": "autogen",
-          "query": "SELECT \"profile\" FROM \"autogen\".\"kvmtop.profile\" WHERE (\"name\" =~ /^$UUID$/) AND $timeFilter",
-          "rawQuery": true,
-          "refId": "A",
-          "resultFormat": "table",
-          "select": [
-            [
-              {
-                "params": [
-                  "cpu"
-                ],
-                "type": "field"
-              }
-            ]
-          ],
-          "tags": []
-        }
-      ],
-      "title": "CPU Profiles",
-      "transform": "table",
-      "type": "table"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "kvmtop-influx",
-      "fill": 1,
-      "gridPos": {
-        "h": 8,
-        "w": 6,
         "x": 0,
-        "y": 19
+        "y": 11
       },
       "id": 3,
       "legend": {
-        "avg": false,
+        "alignAsTable": true,
+        "avg": true,
         "current": false,
         "max": false,
         "min": false,
+        "rightSide": true,
         "show": true,
+        "sort": "avg",
+        "sortDesc": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -1097,7 +796,7 @@
           "measurement": "kvmtop.domains",
           "orderByTime": "ASC",
           "policy": "autogen",
-          "query": "SELECT\n  sum(\"io_read_bytes\") AS \"read_bytes\",\n  sum(\"io_write_bytes\") AS \"write_bytes\"\nFROM\n(\n  SELECT mean(\"io_read_bytes\") AS \"io_read_bytes\", mean(\"io_write_bytes\") AS \"io_write_bytes\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter GROUP BY time($__interval), \"UUID\" fill(null)\n) GROUP BY time($__interval) FILL(none)",
+          "query": "SELECT\n  sum(\"io_read_bytes\") AS \"read_bytes\",\n  sum(\"io_write_bytes\") AS \"write_bytes\"\nFROM\n(\n  SELECT mean(\"io_read_bytes\") AS \"io_read_bytes\", mean(\"io_write_bytes\") AS \"io_write_bytes\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter GROUP BY time($__interval), \"UUID\" fill(null)\n) GROUP BY time($__interval), \"UUID\" FILL(none)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1138,6 +837,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Disk I/O Bytes",
       "tooltip": {
@@ -1184,20 +884,24 @@
       "datasource": "kvmtop-influx",
       "fill": 1,
       "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 6,
-        "y": 19
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 11
       },
       "id": 4,
       "legend": {
-        "avg": false,
+        "alignAsTable": true,
+        "avg": true,
         "current": false,
         "max": false,
         "min": false,
+        "rightSide": true,
         "show": true,
+        "sort": "avg",
+        "sortDesc": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -1230,7 +934,7 @@
           "measurement": "kvmtop.domains",
           "orderByTime": "ASC",
           "policy": "autogen",
-          "query": "SELECT\n  sum(\"net_receivedBytes\") AS \"received\",\n  sum(\"net_transmittedBytes\") AS \"transmitted\"\nFROM\n(\n  SELECT mean(\"net_receivedBytes\") AS \"net_receivedBytes\", mean(\"net_transmittedBytes\") AS \"net_transmittedBytes\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter GROUP BY time($__interval), \"UUID\" fill(null)\n) GROUP BY time($__interval) FILL(none)",
+          "query": "SELECT\n  sum(\"net_receivedBytes\") AS \"received\",\n  sum(\"net_transmittedBytes\") AS \"transmitted\"\nFROM\n(\n  SELECT mean(\"net_receivedBytes\") AS \"net_receivedBytes\", mean(\"net_transmittedBytes\") AS \"net_transmittedBytes\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter GROUP BY time($__interval), \"UUID\" fill(null)\n) GROUP BY time($__interval), \"UUID\" FILL(none)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1271,6 +975,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Network Bytes",
       "tooltip": {
@@ -1308,6 +1013,270 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "kvmtop-influx",
+      "fill": 1,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 23
+      },
+      "id": 15,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "sort": "avg",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "UUID"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "kvmtop.domains",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT\n  sum(\"ram_total\") AS \"ram_total\",\n  sum(\"ram_used\") AS \"ram_used\"\nFROM\n(\n  SELECT mean(\"ram_total\") AS \"ram_total\",  mean(\"ram_used\") AS \"ram_used\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND $timeFilter GROUP BY time($__interval), \"UUID\" fill(null)\n) GROUP BY time($__interval), \"UUID\" FILL(none)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "cpu_total"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "UUID",
+              "operator": "=~",
+              "value": "/^$UUID$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Memory Utilisation",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "deckbytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "kvmtop-influx",
+      "fill": 1,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 23
+      },
+      "id": 9,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": true,
+        "show": true,
+        "sort": "avg",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "UUID"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "kvmtop.domains",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT\n  sum(\"disk_size_capacity\") AS \"capacity\",\n  sum(\"disk_size_allocation\") AS \"allocation\"\nFROM\n(\n  SELECT mean(\"disk_size_capacity\") AS \"disk_size_capacity\", mean(\"disk_size_allocation\") AS \"disk_size_allocation\" FROM \"autogen\".\"kvmtop.domains\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter GROUP BY time($__interval), \"UUID\" fill(null)\n) GROUP BY time($__interval), \"UUID\" FILL(none)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "cpu_total"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "UUID",
+              "operator": "=~",
+              "value": "/^$UUID$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Disk Allocation",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "decbytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "schemaVersion": 16,
@@ -1318,11 +1287,11 @@
       {
         "allValue": ".*",
         "current": {
-          "selected": false,
           "text": "All",
           "value": "$__all"
         },
         "datasource": "kvmtop-influx",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": null,
@@ -1349,6 +1318,7 @@
           ]
         },
         "datasource": "kvmtop-influx",
+        "definition": "",
         "hide": 0,
         "includeAll": true,
         "label": null,
@@ -1369,7 +1339,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {
@@ -1400,5 +1370,5 @@
   "timezone": "",
   "title": "kvmtop: virtual machine inspection",
   "uid": "kvmtop-vms",
-  "version": 7
+  "version": 8
 }
