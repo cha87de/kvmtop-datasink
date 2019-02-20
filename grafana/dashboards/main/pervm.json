@@ -1022,7 +1022,7 @@
           "measurement": "kvmtop.profile",
           "orderByTime": "ASC",
           "policy": "autogen",
-          "query": "SELECT \"UUID\", \"cpu\", \"io\", \"net\" FROM \"autogen\".\"kvmtop.profile\" WHERE (\"UUID\" =~ /^$UUID$/) AND (\"host_name\" =~ /^$host_name$/) AND $timeFilter",
+          "query": "SELECT \"profile\" FROM \"autogen\".\"kvmtop.profile\" WHERE (\"name\" =~ /^$UUID$/) AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "table",
