@@ -9,23 +9,26 @@ filter {
     metricize {
         # split event into domain and host event
        metrics => [ "domains", "host", "profile" ]
+       value_field_name => "rawin"
     }
 
     if [metric] == "domains" {
         # produce one event for each domain
         split {
-            field => "value"
+            field => "rawin"
         }
     }
 
     if [metric] == "domains" or [metric] == "host" {
-        # move fields form 'value' object to root
+        # move fields form 'rawin' object to root
         ruby {
             code => "
-                event.get('value').each {|k, v|
-                    event.set(k, v)
-                }
-                event.remove('value')
+                if event.get('rawin').respond_to?('each')
+                    event.get('rawin').each {|k, v|
+                        event.set(k, v)
+                    }
+                end
+                event.remove('rawin')
             "
         }
     }
@@ -36,39 +39,45 @@ filter {
         # {
         #     "profile": {
         #        "name": "vm uuid",
-        #        "metrics": [{
-        #            "name": "cpu",
-        #            "txmatrix": ...,
-        #            "stats": ...
-        #        }]
+        #        "periodTree": {
+        #            "root": {
+        #                   "maxChilds": 1,
+        #                   "children": [ ... other nodes like root node ... ]
+        #                   "txmatrix": [{
+        #                       "metric": "cpu",
+        #                       "transitions": ...,
+        #                       "stats": ...
+        #                   }, ... , {
+        #                       "metric": "net",
+        #                       "transitions": ...,
+        #                       "stats": ...
+        #                   }]
+        #            }
+        #        }
+        #        "settings": ...
         #     }
         # }
         #
-        # rearrange metric profiles to:
-        #
-        #  {
-        #    "metric" => "profile",
-        #    "UUID" => "c08b4f88-a833-4468-bf11-4c6c2dadd277",        
-        #    "cpu" => "{"name":"cpu","txmatrix":[[100,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],"stats":{"min":0,"max":100,"stddev":0,"avg":0}}",
-        #    "io" => "...",
-        #    "net" => "...",
-        #  }
 
         ruby {
             code => "
-                event.get('value').each {|k, v|
-                    if k == 'name'
-                        event.set('UUID', v)
-                    elsif k == 'metrics'
-                        v.each {|metric|
-                            event.set(metric['name'], metric.to_json)
-                        }
-                    end
-                }
-                event.remove('value')
+                if event.get('rawin').respond_to?('each')
+                    profile = {}
+                    event.get('rawin').each {|k, v|
+                        if k == 'name'
+                            event.set('name', v)
+                        elsif k == 'periodTree'
+                            profile['periodTree'] = v
+                        elsif k == 'settings'
+                            profile['settings'] = v
+                        end
+                    }
+                    event.set('profile', profile.to_json)
+                end
+                event.remove('rawin')
             "
         }
-    }  
+    }
 
 }
 
@@ -105,7 +114,7 @@ output {
     }
 
     if [metric] == "profile" {
-        stdout {}
+        #stdout {}
         influxdb {
             host => "$OUTPUT_HOST"
             port => $OUTPUT_PORT
@@ -114,7 +123,7 @@ output {
             db => "kvmtop"
             time_precision => "ms"
             measurement => "kvmtop.profile"
-            send_as_tags => ["UUID"]
+            send_as_tags => ["name"]
             use_event_fields_for_data_points => true
         }    
     }    
