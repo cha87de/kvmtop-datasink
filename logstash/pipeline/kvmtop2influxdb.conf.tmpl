@@ -31,12 +31,27 @@ filter {
     }
 
     if [metric] == "profile" {
+        # receiving this:
+        #
+        # {
+        #     "profile": {
+        #        "name": "vm uuid",
+        #        "metrics": [{
+        #            "name": "cpu",
+        #            "txmatrix": ...,
+        #        }]
+        #     }
+        # }
+        #
         # rearrange metric profiles to:
-        #  "metric" => "profile",
-        #  "UUID" => "c08b4f88-a833-4468-bf11-4c6c2dadd277",        
-        #  "cpu" => "{"name":"cpu","txmatrix":[[100,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],"stats":{"min":0,"max":100,"stddev":0,"avg":0}}",
-        #  "io" => "...",
-        #  "net" => "...",
+        #
+        #  {
+        #    "metric" => "profile",
+        #    "UUID" => "c08b4f88-a833-4468-bf11-4c6c2dadd277",        
+        #    "cpu" => "{"name":"cpu","txmatrix":[[100,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],"stats":{"min":0,"max":100,"stddev":0,"avg":0}}",
+        #    "io" => "...",
+        #    "net" => "...",
+        #  }
 
         ruby {
             code => "
